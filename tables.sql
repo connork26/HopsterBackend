@@ -121,12 +121,13 @@ CREATE TABLE UserFollowsTag (
 		on delete cascade
 );
 
--- INSERT INTO Users (username, password, email, zipcode, birthyear) values (
--- 	'connork',
--- 	'password',
--- 	'connor@email.com',
--- 	'92078',
--- 	'1993'
--- );
+INSERT INTO Users (fName, lName, email, password, zipcode, accountType) values (
+	'Connor',
+	'Kuehnle',
+	'connor@email.com',
+	'password',
+	'94928',
+	'U'
+);
 
 

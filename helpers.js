@@ -31,7 +31,7 @@ module.exports = {
             // Make sure each param listed in arr is present in req.query
             var missing_params = [];
             for (var i = 0; i < arr.length; i++) {
-                if (!eval("req.params." + arr[i])) {
+                if (!eval("req.body." + arr[i])) {
                     missing_params.push(arr[i]);
                 }
             }

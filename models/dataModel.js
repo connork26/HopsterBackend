@@ -23,7 +23,7 @@ var dbConfig = {
 var connection = mysql.createConnection(dbConfig);
 
 exports.checkForUser = function (email, password, callback) {
-    var query = 'SELECT email FROM Users WHERE email = "' + email + '" AND password = "' + password + '";';
+    var query = 'SELECT fName, lName, userID FROM Users WHERE email = "' + email + '" AND password = "' + password + '";';
     connection.query(query,
         function (err, result) {
             if (err) {
@@ -39,18 +39,33 @@ exports.checkForUser = function (email, password, callback) {
     );
 };
 
-exports.createUser = function (email, username, password, zip, birthyear, callback){
-    var query = 'INSERT INTO Users (email, username, password, zipcode, birthyear) values (' +  
-        '"' + email + '", "' + username + '", "' + password + '", ' + zip + ', ' + birthyear + ');';
+exports.checkForUserWithEmail = function (email, callback) {
+    var query = 'SELECT fName, lName, userID FROM Users WHERE email = "' + email + '";';
+    connection.query(query,
+        function (err, result) {
+            if (err) {
+                console.log(err);
+                return null;
+            }
+            if (result.length > 0){
+                callback(false, result[0]);
+            } else {
+                callback(false, null);
+            }
+        }
+    );
+};
 
-    console.log(query);
-    connection.query(query, 
+exports.createUser = function (fName, lName, password, email, zipcode, callback){
+    var query = 'INSERT INTO Users (fName, lName, password, email, zipcode) values (' +
+        '"' + fName + '", "' + lName + '", "' + password + '", "' + email + '", ' + zipcode + ');';
+    connection.query(query,
         function (err, result){
             if (err) {
                 console.log(err);
                 callback(true, err);
             } else {
-                callback(false);                
+                callback(false, result);
             }
         }
     );
