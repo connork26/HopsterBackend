@@ -22,6 +22,8 @@ var dbConfig = {
 
 var connection = mysql.createConnection(dbConfig);
 
+/////////////////// USERS
+
 exports.checkForUser = function (email, password, callback) {
     var query = 'SELECT fName, lName, userID FROM Users WHERE email = "' + email + '" AND password = "' + password + '";';
     connection.query(query,
@@ -69,9 +71,25 @@ exports.createUser = function (fName, lName, password, email, zipcode, callback)
             }
         }
     );
-}
+};
 
+/////// BEERS
 
+exports.getAllBeers = function (callback){
+    var query = 'SELECT b.beerID as beerID, b.name as beerName, b.breweryID as breweryID, ' +
+            'b.styleID as styleID, b.description as description, b.abv as abv, s.name as styleName, ' +
+            'br.name as breweryName from Beers b join Styles s on b.styleID = s.styleID join Breweries br on br.breweryID = b.breweryID;';
+    connection.query(query,
+        function (err, result){
+            if (err) {
+                console.log(err);
+                callback(true, err);
+            } else {
+                callback(false, result);
+            }
+        }
+    )
+};
 
 handleDisconnect();
 
