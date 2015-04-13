@@ -32,6 +32,7 @@ CREATE TABLE Styles (
 
 CREATE TABLE Beers (
 	beerID int primary key auto_increment,
+	name varchar(150),
 	breweryID int not null,
 	styleID int not null,
 	description varchar(500),
@@ -57,7 +58,7 @@ CREATE TABLE Pubs (
 CREATE TABLE TapList (
 	beerID int,
 	pubID int,
-	postedAt timestamp,
+	postedAt timestamp default current_timestamp,
 	primary key (beerID, pubID),
 	foreign key (beerID)
 		references Beers(beerID)
@@ -149,8 +150,8 @@ INSERT INTO Styles (name, description) values (
 
 INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
 	'Lagunitas',
-	'1280 N McDowell Blvd'
-	'Petaluma'
+	'1280 N McDowell Blvd',
+	'Petaluma',
 	'CA',
 	94954	
 );
@@ -193,11 +194,57 @@ INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
 	3,
 	'Before Sierra Nevada was a reality, our founders brewed beer at home and dreamed of building a brewery one day. Back then, they brewed the beers they wanted to drink—bold and full of flavor. Stouts had always been a favorite, so when we needed a big and rich beer to test out the brewing system at our fledgling brewery, stout was the obvious choice. Thirty years later, not much has changed. We’re still brewing the beers we want to drink and our classic Stout is the same as it’s ever been—big, rich, bold, black as night and filled with the wild-eyed passion of which dreams are made.',
 	5.8
-);
-	'Stout',
-	3,
-	3,
-	'Our original Pale Ale is a rich golden brew, crafted with aromatic German hops and rounded out with a blend of American and Munich malts. While it’s hopped like a lager, we ferment it like an ale to create a smooth, bright taste that has just a hint of fruit and spice. It’s extremely drinkable, like a Kolsch should be, yet complex, like a good craft beer demands.',
-	5.2
 ); 
- 
+
+INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+	'Twin Oaks Tavern',
+	'Small, local tavern with a lot of history',
+	'5745 Old Redwood Hwy', 
+	'Penngrove', 
+	'CA',
+	94951
+);
+
+INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+	'Beer Craft',
+	'Bottle shop with 12 taps in the back',
+	'5704 Commerce Blvd', 
+	'Rohnert Park', 
+	'CA',
+	94928 
+);
+
+INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+	'Friar Tucks Pub',
+	'Irish bar popular with the local college scene',
+	'8201 Old Redwood Hwy', 
+	'Cotati', 
+	'CA',
+	94931 
+);
+
+INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+	'Lagunitas Tasting Room',
+	'Tasting room on brewery premis with live music and awesome food',
+	'1280 N McDowell Blvd',
+	'Petaluma',
+	'CA',
+	94954 
+);
+
+INSERT INTO TapList (beerID, pubID) values (
+	1,
+	1
+);
+
+INSERT INTO TapList (beerID, pubID) values (
+	2,
+	2
+);
+
+INSERT INTO TapList (beerID, pubID) values (
+	3,
+	3
+);
+
+

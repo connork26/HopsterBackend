@@ -91,6 +91,21 @@ exports.getAllBeers = function (callback){
     )
 };
 
+////////// PUBS
+
+exports.getAllPubs = function (callback) {
+    connection.query('SELECT * FROM Pubs;',
+        function (err, result){
+            if (err){
+                console.log(err);
+                return callback(true, err);
+            }
+
+            return callback(false, result);
+        }
+    );
+}
+
 handleDisconnect();
 
 function handleDisconnect() {
