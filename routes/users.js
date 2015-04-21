@@ -41,7 +41,12 @@ router.post('/createUser', helpers.checkPostParams(['fName', 'lName', 'email', '
                             } else {
                                 checkForUser(req.body.email, req.body.password,
                                     function(user) {
-                                        res.send(JSON.stringify(user));
+                                        createTagForNewUser(user.userID,
+                                            function (tagID) {
+                                                user.tagID = tagID
+                                                res.send(JSON.stringify(user));
+                                            }
+                                        );
                                     }
                                 );
                             }
@@ -50,6 +55,13 @@ router.post('/createUser', helpers.checkPostParams(['fName', 'lName', 'email', '
                 }
             }
         );
+    }
+);
+
+router.post('/tagForUser', helpers.checkGetParams(['userID', 'tagID']),
+    function (req, res, next){
+        db.addUserFollowsTag(req.query.userID, req.query.tagID, function(){});
+        res.send(true);
     }
 );
 
@@ -69,7 +81,7 @@ function checkForUserWithEmail (email, next){
     db.checkForUserWithEmail(email,
         function (err, results){
             if (results){
-                return next(true);
+                return next(results);
             } else {
                 return next(false);
             }
@@ -77,6 +89,18 @@ function checkForUserWithEmail (email, next){
     );
 }
 
+function createTagForNewUser (userID, next) {
+    db.createTagForNewUser(userID,
+        function (err, createResult) {
+            db.getTagForUser(userID,
+                function (err, tagResult){
+                    db.setTagForUser(userID, tagResult, null);
+                    return next(tagResult);
+                }
+            );
+        }
+    );
+}
 
 
 module.exports = router;

@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -9,6 +8,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var beers = require('./routes/beers');
 var pubs = require('./routes/pubs');
+var posts = require('./routes/posts');
 
 var app = express();
 
@@ -28,6 +28,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/beers', beers);
 app.use('/pubs', pubs);
+app.use('/posts', posts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

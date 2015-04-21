@@ -6,13 +6,13 @@ USE hopster;
 
 CREATE TABLE Users (
 	userID INT PRIMARY KEY AUTO_INCREMENT,
-	username varchar (100) unique,
 	fName varchar(25) not null,
 	lName varchar(25) not null,
 	email varchar(200) not null,
 	password varchar(25) not null,
 	zipcode INT not null,
-	accountType varchar(25) not null
+	accountType varchar(25) not null default 'U',
+	tagID int
 );
 
 CREATE TABLE Breweries (
@@ -91,11 +91,19 @@ CREATE TABLE Tags (
 	tagID int primary key auto_increment,
 	beerID int unique,
 	pubID int unique,
+	userID int unique,
+	breweryID int unique,
 	foreign key (beerID)
 		references Beers(beerID)
 		on delete cascade,
 	foreign key (pubID)
 		references Pubs(pubID)
+		on delete cascade,
+	foreign key (userID)
+		references Users(userID)
+		on delete cascade,
+	foreign key (breweryID)
+		references Breweries(breweryID)
 		on delete cascade
 );
 
@@ -123,8 +131,8 @@ CREATE TABLE UserFollowsTag (
 		on delete cascade
 );
 
-INSERT INTO Users (username, fName, lName, email, password, zipcode, accountType) values (
-	'connork26',
+INSERT INTO Users (userID, fName, lName, email, password, zipcode, accountType) values (
+	1,
 	'Connor',
 	'Kuehnle',
 	'connor@email.com',
@@ -133,22 +141,26 @@ INSERT INTO Users (username, fName, lName, email, password, zipcode, accountType
 	'U'
 );
 
-INSERT INTO Styles (name, description) values (
+INSERT INTO Styles (styleID, name, description) values (
+	1,
 	'American IPA',
 	'The American IPA is a different soul from the reincarnated IPA style. More flavorful than the withering English IPA, color can range from very pale golden to reddish amber. Hops are typically American with a big herbal and / or citric character, bitterness is high as well. Moderate to medium bodied with a balancing malt backbone.'
 );
 
-INSERT INTO Styles (name, description) values (
+INSERT INTO Styles (styleID, name, description) values (
+	2,
 	'American Pale Ale',
 	'Of British origin, this style is now popular worldwide and the use of local ingredients, or imported, produces variances in character from region to region. Generally, expect a good balance of malt and hops. Fruity esters and diacetyl can vary from none to moderate, and bitterness can range from lightly floral to pungent.'
 );
 
-INSERT INTO Styles (name, description) values (
+INSERT INTO Styles (styleID, name, description) values (
+	3,
 	'American Stout',
 	'Inspired from English & Irish Stouts, the American Stout is the ingenuous creation from that. Thankfully with lots of innovation and originality American brewers have taken this style to a new level. Whether it is highly hopping the brew or adding coffee or chocolate to complement the roasted flavors associated with this style. '
 );
 
-INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Breweries (breweryID, name, streetAddress, city, stateAbrv, zipcode) values (
+	1,	
 	'Lagunitas',
 	'1280 N McDowell Blvd',
 	'Petaluma',
@@ -156,7 +168,8 @@ INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
 	94954	
 );
 
-INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Breweries (breweryID, name, streetAddress, city, stateAbrv, zipcode) values (
+	2,
 	'Ballast Point',
 	'9045 Carroll Way',
 	'San Diego',
@@ -164,7 +177,8 @@ INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
 	92121	
 );
 
-INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Breweries (breweryID, name, streetAddress, city, stateAbrv, zipcode) values (
+	3,
 	'Sierra Navada',
 	'1075 East 20th Street',
 	'Chico', 
@@ -172,7 +186,8 @@ INSERT INTO Breweries (name, streetAddress, city, stateAbrv, zipcode) values (
 	95928
 );
 
-INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
+INSERT INTO Beers (beerID, name, breweryID, styleID, description, abv) values (
+	1,
 	'Lagunitas IPA',
 	1,
 	1,
@@ -180,7 +195,8 @@ INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
 	6.2
 ); 
 
-INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
+INSERT INTO Beers (beerID, name, breweryID, styleID, description, abv) values (
+	2,
 	'Pale Ale',
 	2,
 	2,
@@ -188,7 +204,8 @@ INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
 	5.2
 );
 
-INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
+INSERT INTO Beers (beerID, name, breweryID, styleID, description, abv) values (
+	3,
 	'Stout',
 	3,
 	3,
@@ -196,7 +213,8 @@ INSERT INTO Beers (name, breweryID, styleID, description, abv) values (
 	5.8
 ); 
 
-INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Pubs (pubID, name, description, streetAddress, city, stateAbrv, zipcode) values (
+	1,
 	'Twin Oaks Tavern',
 	'Small, local tavern with a lot of history',
 	'5745 Old Redwood Hwy', 
@@ -205,7 +223,8 @@ INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) va
 	94951
 );
 
-INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Pubs (pubID, name, description, streetAddress, city, stateAbrv, zipcode) values (
+	2,
 	'Beer Craft',
 	'Bottle shop with 12 taps in the back',
 	'5704 Commerce Blvd', 
@@ -214,7 +233,8 @@ INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) va
 	94928 
 );
 
-INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Pubs (pubID, name, description, streetAddress, city, stateAbrv, zipcode) values (
+	3,
 	'Friar Tucks Pub',
 	'Irish bar popular with the local college scene',
 	'8201 Old Redwood Hwy', 
@@ -223,7 +243,8 @@ INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) va
 	94931 
 );
 
-INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) values (
+INSERT INTO Pubs (pubID, name, description, streetAddress, city, stateAbrv, zipcode) values (
+	4,
 	'Lagunitas Tasting Room',
 	'Tasting room on brewery premis with live music and awesome food',
 	'1280 N McDowell Blvd',
@@ -231,6 +252,22 @@ INSERT INTO Pubs (name, description, streetAddress, city, stateAbrv, zipcode) va
 	'CA',
 	94954 
 );
+
+
+insert into Tags (userID) values (1);
+
+insert into Tags (breweryID) values (1);
+insert into Tags (breweryID) values (2);
+insert into Tags (breweryID) values (3);
+
+insert into Tags (pubID) values (1);
+insert into Tags (pubID) values (2);
+insert into Tags (pubID) values (3);
+insert into Tags (pubID) values (4);
+
+insert into Tags (beerID) values (1);
+insert into Tags (beerID) values (2);
+insert into Tags (beerID) values (3);
 
 INSERT INTO TapList (beerID, pubID) values (
 	1,
