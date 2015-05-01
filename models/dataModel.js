@@ -3,22 +3,22 @@ var mysql = require('mysql');
 
 // local Application initialization
 
-var dbConfig = {
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    port     : 3306,
-    database : 'hopster'
-};
-
-
-// on server db
 //var dbConfig = {
-//    host     : 'us-cdbr-iron-east-02.cleardb.net',
-//    user     : 'b5d30d726262d9',
-//    password : '7abc1f81',
-//    database : 'heroku_e20395081287bb0'
-//}
+//    host     : 'localhost',
+//    user     : 'root',
+//    password : '',
+//    port     : 3306,
+//    database : 'hopster'
+//};
+
+
+//on server db
+var dbConfig = {
+    host     : 'us-cdbr-iron-east-02.cleardb.net',
+    user     : 'b5d30d726262d9',
+    password : '7abc1f81',
+    database : 'heroku_e20395081287bb0'
+}
 
 var connection = mysql.createConnection(dbConfig);
 
