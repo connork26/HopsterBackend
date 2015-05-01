@@ -76,6 +76,7 @@ CREATE TABLE Posts (
 	userID int,
 	comment varchar(250),
 	picURL varchar(250),
+	postedAt timestamp default current_timestamp,
 	foreign key (beerID)
 		references Beers(beerID)
 		on delete cascade,

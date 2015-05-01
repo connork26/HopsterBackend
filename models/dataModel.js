@@ -3,22 +3,22 @@ var mysql = require('mysql');
 
 // local Application initialization
 
-//var dbConfig = {
-//    host     : 'localhost',
-//    user     : 'root',
-//    password : '',
-//    port     : 3306,
-//    database : 'hopster'
-//};
+var dbConfig = {
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    port     : 3306,
+    database : 'hopster'
+};
 
 
 // on server db
-var dbConfig = {
-    host     : 'us-cdbr-iron-east-02.cleardb.net',
-    user     : 'b5d30d726262d9',
-    password : '7abc1f81',
-    database : 'heroku_e20395081287bb0'
-}
+//var dbConfig = {
+//    host     : 'us-cdbr-iron-east-02.cleardb.net',
+//    user     : 'b5d30d726262d9',
+//    password : '7abc1f81',
+//    database : 'heroku_e20395081287bb0'
+//}
 
 var connection = mysql.createConnection(dbConfig);
 
@@ -244,7 +244,8 @@ exports.getAllPostsForPostIDs = function (postIDs, callback) {
     var query = '';
 
     if (postIDs.length == 0){
-        query = 'SELECT * FROM Posts limit 25;'
+        query = 'SELECT date_format(postedAt, "%e %b %Y") as postedAt, p.postID as postID, p.comment as comment, ifnull(p.beerID, "NULL") as beerID, ifnull(b.name, "NULL") as beerName, ifnull(p.pubID, "NULL") as pubID, ifnull(Pubs.name, "NULL") as pubName, u.userID as userID, u.fName as fName, u.lName as lName FROM Posts p left join Beers b on b.beerID = p.beerID left join Pubs on p.pubID = Pubs.pubID join Users u on u.userID = p.userID;';
+
     } else {
         query = 'SELECT * FROM Posts where postID in ' + arrayTags + ';';
     }
@@ -260,6 +261,46 @@ exports.getAllPostsForPostIDs = function (postIDs, callback) {
         }
     );
 
+};
+
+exports.addTagForPost = function (postID, tagID) {
+    var query = 'INSERT INTO PostTags (postID, tagID) values (' + postID + ', ' + tagID + ');';
+    connection.query(query,
+        function(err, result){
+            if (err){
+                console.log(err);
+            }
+        }
+    );
+};
+
+//////// POSTS
+
+exports.postNewPost = function (userID, comment, beerID, pubID, callback) {
+    if (!beerID){
+        beerID = 'NULL';
+    }
+
+    if(!pubID){
+        pubID = 'NULL';
+    }
+
+    var query = 'INSERT INTO Posts (userID, comment, beerID, pubID) values ('
+        + userID + ', "' + comment + '", ' + beerID + ', ' + pubID +');';
+
+    console.log('query: ' + query);
+    connection.query(query,
+        function (err, result){
+            if (err){
+                console.log(err);
+                return callback(true, err);
+            }
+
+            console.log('db result: ' + result.insertId);
+            return callback(false, result);
+
+        }
+    );
 };
 
 handleDisconnect();
