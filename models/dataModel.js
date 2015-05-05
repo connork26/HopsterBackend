@@ -78,8 +78,8 @@ exports.createUser = function (fName, lName, password, email, zipcode, callback)
 exports.getAllBeers = function (callback){
     var query = 'SELECT b.beerID as beerID, b.name as beerName, b.breweryID as breweryID, ' +
             'b.styleID as styleID, b.description as description, b.abv as abv, s.name as styleName, ' +
-            'br.name as breweryName, t.tagID as tagID from Beers b join Styles s on b.styleID = s.styleID ' +
-            'join Breweries br on br.breweryID = b.breweryID join Tags t on t.beerID = b.beerID;';
+            'br.name as breweryName  from Beers b join Styles s on b.styleID = s.styleID ' +
+            'join Breweries br on br.breweryID = b.breweryID';
     connection.query(query,
         function (err, result){
             if (err) {
